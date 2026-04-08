@@ -38,7 +38,7 @@ NPROCS := $(shell nproc)
 $(BUILDDIR)/linux-prepare-checkout-stamp:
 	@echo "$(COLOUR_GREEN)Checking out Kernel for $(BOARD)$(END_COLOUR)"
 	@mkdir -p $(BUILDDIR)
-	@git clone -b sg200x-dev --depth 7 https://github.com/sophgo/linux_5.10.git /build/kernel
+	@git clone -b sg200x-dev https://github.com/sophgo/linux_5.10.git /build/kernel
 	@cd $(BUILDDIR)/kernel && git checkout 8b8fbf8
 	@touch $@
 
@@ -79,7 +79,7 @@ linux-clean:
 $(BUILDDIR)/uboot-prepare-checkout-stamp:
 	@echo "$(COLOUR_GREEN)Checking out U-Boot for $(BOARD)$(END_COLOUR)"
 	@mkdir -p $(BUILDDIR)
-	@git clone --depth 1 https://github.com/sophgo/u-boot-2021.10.git $(BUILDDIR)/u-boot
+	@git clone https://github.com/sophgo/u-boot-2021.10.git $(BUILDDIR)/u-boot
 	@cd $(BUILDDIR)/u-boot && git checkout 4a21b6b
 	@touch $@
 
@@ -122,7 +122,7 @@ uboot-clean:
 $(BUILDDIR)/opensbi-prepare-checkout-stamp:
 	@echo "$(COLOUR_GREEN)Checking out OpenSBI for $(BOARD)$(END_COLOUR)"
 	@mkdir -p $(BUILDDIR)
-	@git clone -b sg200x-dev --depth 4 https://github.com/sophgo/opensbi.git $(BUILDDIR)/opensbi
+	@git clone -b sg200x-dev https://github.com/sophgo/opensbi.git $(BUILDDIR)/opensbi
 	@cd $(BUILDDIR)/opensbi && git checkout 216793f
 #	git clone https://github.com/riscv-software-src/opensbi.git $(BUILDDIR)/opensbi
 #	@cd $(BUILDDIR)/opensbi && git checkout a2b255b
@@ -151,7 +151,7 @@ opensbi-clean:
 $(BUILDDIR)/fsbl-prepare-checkout-stamp:
 	@echo "$(COLOUR_GREEN)Checking out FSBL for $(BOARD)$(END_COLOUR)"
 	@mkdir -p $(BUILDDIR)
-	@git clone -b sg200x-dev --depth 1 https://github.com/sophgo/fsbl.git $(BUILDDIR)/fsbl
+	@git clone -b sg200x-dev https://github.com/sophgo/fsbl.git $(BUILDDIR)/fsbl
 	@cd $(BUILDDIR)/fsbl && git checkout 15a84c5
 	@touch $@
 
@@ -199,7 +199,7 @@ $(BUILDDIR)/image-prepare-stamp:
 	@mkdir -p /rootfs/
 	@curl -v -L https://sophgo.my-ho.st:8443/public-key.asc -o $(BUILDDIR)/public-key.asc
 	@apt-key add $(BUILDDIR)/public-key.asc
-	@mmdebstrap -v --architectures=riscv64 --include="$(_PACKAGES)" sid "/rootfs/" "deb http://deb.debian.org/debian/ sid main" "deb https://sophgo.my-ho.st:8443/ debian sophgo"
+	@mmdebstrap -v --architectures=riscv64 --include="$(_PACKAGES)" trixie "/rootfs/" "deb http://deb.debian.org/debian/ trixie main" "deb https://sophgo.my-ho.st:8443/ debian sophgo"
 	@touch $@
 
 $(BUILDDIR)/image-addons-stamp: $(BUILDDIR)/image-prepare-stamp $(BUILDDIR)/fsbl-package-stamp $(BUILDDIR)/linux-compile-stamp $(addon-targets)
